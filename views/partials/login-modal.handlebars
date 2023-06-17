@@ -1,0 +1,29 @@
+<div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <h5 class="modal-title" id="exampleModalLabel">Log in here!</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <form class="login-form">
+                <div class="mb-3">
+                    <label for="email-login" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="email-login" placeholder="name@example.com"/>
+                </div>
+                <div class="mb-3">
+                    <label for="password-login" class="form-label">Password</label>
+                    <input type="password" class="form-control" id="password-login" placeholder="**********"/>
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-primary">Login</button>
+                    <button type="button" class="btn btn-outline-primary me-2" data-bs-dismiss="modal"
+                        data-bs-toggle="modal" data-bs-target="#signupModal">Sign-Up!</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+</div>
+
+<script src="/public/login.js"></script>
