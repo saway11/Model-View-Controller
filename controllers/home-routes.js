@@ -1,105 +1,103 @@
 const router = require('express').Router();
+const { BlogPost, Author, Comment } = require('../models');
 const withAuth = require('../utils/auth');
-const {
-  Post,
-  User,
-  Comment
-} = require('../models');
 
-router.get('/', (req, res) => {
-  Post.findAll({
-      attributes: [
-        'id',
-        'post',
-        'title',
-        'created_at'
+
+router.get('/', async (req, res) => {
+  try {
+    // Get all blog posts and JOIN with author data
+    const blogPostData = await BlogPost.findAll({
+      include: [
+        {
+          model: Author,
+          attributes: ['name'],
+        },
       ],
-      include: [{
-          model: Comment,
-          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-          include: {
-            model: User,
-            attributes: ['username']
-          }
+    });
+
+    // Serialize data so the template can read it
+    const blogposts = blogPostData.map((blog) => blog.get({ plain: true }));
+
+    // Pass serialized data and session flag into template
+    res.render('homepage', { 
+      blogposts, 
+      logged_in: req.session.logged_in 
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+router.get('/blog/:id', async (req, res) => {
+  try {
+    const blogPostData = await BlogPost.findByPk(req.params.id, {
+      include: [
+        {
+          model: Author,
+          attributes: ['name'],
         },
         {
-          model: User,
-          attributes: ['username']
-        }
-      ]
-    })
-    .then(dbPostData => {
-      const posts = dbPostData.map(post => post.get({
-        plain: true
-      }));
-      console.log(req.session.loggedIn);
-      res.render('homepage', {
-        posts,
-        loggedIn: req.session.loggedIn
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
+          model: Comment,
+          attributes: ['comment_content', 'date_created', 'author_id'],
+          include: [
+            {
+              model: Author,
+              attributes: ['name'],
+            }
+          ]
+        },
+      ],
     });
+    
+    // Serialize data for handlebars template
+    const blog = blogPostData.get({ plain: true });
+
+
+    res.render('blogpost', {
+      ...blog,
+      logged_in: req.session.logged_in
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// Use withAuth middleware to prevent access to route
+router.get('/dashboard', withAuth, async (req, res) => {
+  try {
+    // Find the logged in user based on the session ID
+    const authorData = await Author.findByPk(req.session.user_id, {
+      attributes: { exclude: ['password'] },
+      include: [{ model: BlogPost }],
+    });
+
+    const author = authorData.get({ plain: true });
+
+    res.render('dashboard', {
+      ...author,
+      logged_in: true
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
 });
 
 router.get('/login', (req, res) => {
-  if (req.session.loggedIn) {
-    res.redirect('/');
+  // If the user is already logged in, redirect the request to another route
+  if (req.session.logged_in) {
+    res.redirect('/dashboard');
     return;
   }
-
   res.render('login');
 });
 
-router.get('/post/:id', withAuth, (req, res) => {
-  Post.findOne({
-      where: {
-        id: req.params.id
-      },
-      attributes: [
-        'id',
-        'post',
-        'title',
-        'created_at'
-      ],
-      include: [{
-          model: Comment,
-          attributes: ['id', 'comment_text', 'post_id', 'user_id', 'created_at'],
-          include: {
-            model: User,
-            attributes: ['username']
-          }
-        },
-        {
-          model: User,
-          attributes: ['username']
-        }
-      ]
-    })
-    .then(dbPostData => {
-      if (!dbPostData) {
-        res.status(404).json({
-          message: 'No post found with this id'
-        });
-        return;
-      }
-
-      const post = dbPostData.get({
-        plain: true
-      });
-
-      res.render('single-post', {
-        post,
-        loggedIn: req.session.loggedIn
-      });
-    })
-    .catch(err => {
-      console.log(err);
-      res.status(500).json(err);
-    });
+router.get('/signup', (req, res) => {
+  // If the user is already logged in, redirect the request to another route
+  if (req.session.logged_in) {
+    res.redirect('/dashboard');
+    return;
+  }
+  res.render('signup');
 });
-
 
 module.exports = router;
