@@ -1,23 +1,30 @@
-<div class="card m-5">
-    <div class="card-body">
-        <div class="card-header">
-            <h5 class="modal-title" id="exampleModalLabel">Edit Post</h5>
-        </div>
-        <div class="card-body">
-            <form class="edit-post-form">
-                <div>
-                    <input name="post-title" type="text" value="{{post.title}}" class="form-control m-2"/>
-                </div>
-                <div>
-                    <textarea name="post" type="text" class="form-control m-2"/>{{post.post}}</textarea>
-                </div>
-                <button class="btn btn-primary m-2" type="submit">Save post</button>
-                <button class="btn btn-danger m-2 delete-post-btn" type="button" class="delete-post-btn">Delete post</button>
-            </form>
-        </div>
-    </div>
+<div class="container container-fluid mt-5">
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <h3>Edit Blog Post:</h3>
+
+    <form class="form edit-blogpost-form">
+      <div class="form-group">
+        <input type="hidden" id="blogpost-id" name="blogpost-id" value="{{id}}" />
+        <label for="blogpost-title">Title:</label>
+        <input class="form-input" type="text" id="blogpost-title" name="blogpost-title" value="{{blog_title}}" />
+      </div>
+
+      <div class="form-group">
+        <label for="blogpost-content">Content:</label>
+        <textarea class="form-input" type="text" id="blogpost-content" name="blogpost-content">{{blog_content}}</textarea>
+      </div>
+      <div class="form-group">
+        <button type="submit" id="update-post" class="btn btn-primary">Update Blog Post</button>
+        
+        {{!-- <button type="submit" id="update-post" class="btn btn-primary">Update</button> --}}
+        <button type="submit" id="delete-post" class="btn btn-primary">Delete Blog Post</button>
+      </div>
+    </form>
+  </div>
 </div>
 
+</div>  
 
-<script src="/javascript/edit-post.js"></script>
-<script src="/javascript/delete-post.js"></script>
+  <script src="/js/editblogpost.js"></script>
