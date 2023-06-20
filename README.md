@@ -1,7 +1,7 @@
 # Model-View-Controller
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 # URL
-
+https://saway11.github.io/Tech-Blog/
 # Description
 Tech-Blog is a simple app used to make blog post. Users can sign-up with their email
 and a username to begin. Users can create, edit, and delete their post, as well
@@ -21,6 +21,11 @@ N/A
 # Usage
 After registering and loggin in, the user will be able to post, like, and comment.
 # Images
+![](./public/img/Screenshot%20(29).png)
+![](./public/img/Screenshot%20(30).png)
+![](./public/img/Screenshot%20(31).png)
+![](./public/img/Screenshot%20(32).png)
+
 # License
 This project is licensed under the MIT license. To learn more please visit https://choosealicense.com/licenses/mit.
 # Credits
