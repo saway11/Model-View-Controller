@@ -8,14 +8,14 @@ const sequelize = require("./config/connection");
 const SequelizeStore = require('connect-session-sequelize')(session.Store);
 
 app.use(session({
-    secret: 'Super secret secret',
-    cookie: {},
-    resave: false,
-    maxAge: Date.now() + (30 * 86400 * 1000),
-    saveUninitialized: true,
-    store: new SequelizeStore({
-        db: sequelize
-    })
+  secret: 'Super secret secret',
+  cookie: {},
+  resave: false,
+  maxAge: Date.now() + (30 * 86400 * 1000),
+  saveUninitialized: true,
+  store: new SequelizeStore({
+    db: sequelize
+  })
 }));
 const helpers = require('./utils/helpers');
 const hbs = exphbs.create({ helpers });
@@ -26,5 +26,5 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(require('./controllers/'));
 sequelize.sync({ force: false }).then(() => {
-    app.listen(PORT, () => console.log('Now listening'));
+  app.listen(PORT, () => console.log('Now listening'));
 });
